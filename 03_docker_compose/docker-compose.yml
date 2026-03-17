@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - /pg:/var/lib/postgresql 
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=mysecretpass
+
+  backend-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+
+    environment:
+      - DATABASE_URL=postgresql://postgres:mysecretpass@postgres:5432/postgres
+
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
